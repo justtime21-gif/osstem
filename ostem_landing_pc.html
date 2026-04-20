@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오스템 처방의약품 서비스</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --orange: #F47B20;
+    --orange-light: #FFA44D;
+    --orange-pale: #FFF4EC;
+    --orange-dark: #D4620F;
+    --white: #FFFFFF;
+    --gray-light: #F8F8F8;
+    --gray: #6B7280;
+    --dark: #1A1A2E;
+  }
+  body { font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; color: var(--dark); background: var(--white); }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #FFE8D0;
+    padding: 0 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; }
+  .nav-logo img { height: 28px; object-fit: contain; }
+  .nav-logo span { font-size: 13px; font-weight: 700; color: var(--dark); }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a { font-size: 13px; font-weight: 600; color: var(--gray); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--orange); }
+  .nav-cta {
+    background: var(--orange); color: white;
+    font-size: 13px; font-weight: 700;
+    padding: 9px 22px; border-radius: 50px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(244,123,32,0.3);
+    transition: transform 0.2s;
+  }
+  .nav-cta:hover { transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #fff 0%, #FFF4EC 55%, #FFE0C4 100%);
+    min-height: 88vh;
+    display: flex; align-items: center;
+    padding: 0 60px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, #FFD4A8 0%, transparent 65%);
+    border-radius: 50%;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; bottom: -80px; left: 30%;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, #FFE8CC 0%, transparent 65%);
+    border-radius: 50%;
+  }
+  .hero-inner { max-width: 1100px; margin: 0 auto; width: 100%; display: flex; align-items: center; gap: 60px; position: relative; z-index: 1; }
+  .hero-text { flex: 1; }
+  .hero-badge {
+    display: inline-block;
+    background: var(--orange); color: white;
+    font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    padding: 6px 16px; border-radius: 20px; margin-bottom: 24px;
+  }
+  .hero h1 { font-size: 48px; font-weight: 900; line-height: 1.2; margin-bottom: 20px; }
+  .hero h1 span { color: var(--orange); }
+  .hero p { font-size: 17px; color: var(--gray); line-height: 1.8; margin-bottom: 36px; }
+  .hero-btns { display: flex; gap: 14px; align-items: center; }
+  .btn-primary {
+    background: var(--orange); color: white;
+    font-size: 15px; font-weight: 700;
+    padding: 14px 32px; border-radius: 50px;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(244,123,32,0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(244,123,32,0.4); }
+  .btn-secondary {
+    color: var(--orange); font-size: 15px; font-weight: 700;
+    text-decoration: none; display: flex; align-items: center; gap: 6px;
+    transition: gap 0.2s;
+  }
+  .btn-secondary:hover { gap: 10px; }
+  .hero-img { flex: 0 0 360px; }
+  .hero-img img { width: 100%; border-radius: 24px; box-shadow: 0 20px 60px rgba(244,123,32,0.2); }
+
+  /* STATS */
+  .stats-bar { background: var(--dark); padding: 28px 60px; }
+  .stats-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-around; }
+  .stat-item { text-align: center; color: white; }
+  .stat-num { font-size: 36px; font-weight: 900; color: var(--orange-light); display: block; }
+  .stat-label { font-size: 12px; opacity: 0.7; margin-top: 6px; }
+
+  /* SECTION COMMON */
+  .section { padding: 90px 60px; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-header { text-align: center; margin-bottom: 56px; }
+  .section-tag { display: inline-block; font-size: 12px; font-weight: 700; color: var(--orange); letter-spacing: 1px; margin-bottom: 12px; }
+  .section-title { font-size: 36px; font-weight: 900; margin-bottom: 14px; line-height: 1.3; }
+  .section-desc { font-size: 16px; color: var(--gray); line-height: 1.7; }
+
+  /* SERVICES */
+  .services-bg { background: var(--gray-light); }
+  .cat-block { margin-bottom: 48px; }
+  .cat-block:last-child { margin-bottom: 0; }
+  .cat-header {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 18px; font-weight: 800; color: var(--orange-dark);
+    margin-bottom: 20px; padding-bottom: 14px;
+    border-bottom: 2px solid #FFD4A8;
+  }
+  .cat-icon-box {
+    width: 36px; height: 36px;
+    background: var(--orange); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .cards-grid.col2 { grid-template-columns: repeat(2, 1fr); max-width: 720px; }
+  .card {
+    background: white; border-radius: 16px; padding: 24px;
+    border: 1.5px solid #FFE8D0;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(244,123,32,0.12); border-color: var(--orange-light); }
+  .card-icon { font-size: 28px; margin-bottom: 12px; }
+  .card-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .card-desc { font-size: 13px; color: var(--gray); line-height: 1.65; }
+
+  /* WHY */
+  .why-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .why-card {
+    text-align: center; padding: 36px 20px;
+    border-radius: 20px; background: var(--orange-pale);
+    border: 1.5px solid #FFD4A8;
+    transition: transform 0.2s;
+  }
+  .why-card:hover { transform: translateY(-4px); }
+  .why-num { font-size: 40px; font-weight: 900; color: var(--orange); display: block; margin-bottom: 12px; }
+  .why-label { font-size: 15px; font-weight: 800; margin-bottom: 8px; }
+  .why-sub { font-size: 13px; color: var(--gray); line-height: 1.6; }
+
+  /* BROCHURE */
+  .brochure-section { background: white; }
+  .brochure-box {
+    background: var(--orange-pale); border: 2px solid #FFD4A8;
+    border-radius: 24px; padding: 48px;
+    display: flex; align-items: center; justify-content: space-between; gap: 40px;
+  }
+  .brochure-box h3 { font-size: 24px; font-weight: 800; margin-bottom: 10px; }
+  .brochure-box p { font-size: 14px; color: var(--gray); line-height: 1.7; }
+  .brochure-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--orange); color: white;
+    font-size: 15px; font-weight: 700;
+    padding: 16px 32px; border-radius: 50px;
+    text-decoration: none; white-space: nowrap;
+    box-shadow: 0 6px 20px rgba(244,123,32,0.35);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .brochure-btn:hover { transform: translateY(-2px); }
+
+  /* CTA */
+  .cta-section {
+    background: linear-gradient(135deg, var(--orange-dark) 0%, var(--orange) 60%, var(--orange-light) 100%);
+    padding: 100px 60px; text-align: center;
+  }
+  .cta-section h2 { color: white; font-size: 40px; font-weight: 900; margin-bottom: 16px; line-height: 1.3; }
+  .cta-section p { color: rgba(255,255,255,0.88); font-size: 16px; margin-bottom: 40px; line-height: 1.7; }
+  .cta-btn-white {
+    display: inline-block; background: white; color: var(--orange-dark);
+    font-size: 17px; font-weight: 800; padding: 16px 48px; border-radius: 50px;
+    text-decoration: none; box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    transition: transform 0.2s;
+  }
+  .cta-btn-white:hover { transform: translateY(-2px); }
+  .cta-sub { margin-top: 18px; font-size: 13px; color: rgba(255,255,255,0.7); }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark); color: rgba(255,255,255,0.5);
+    padding: 36px 60px; display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px;
+  }
+  footer strong { color: white; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 12px; }
+  .footer-links a:hover { color: white; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <img src="https://raw.githubusercontent.com/justtime21-gif/osstem/main/SCR-20260420-olzy.png"
+      alt="오스템임플란트" onerror="this.style.display='none'">
+    <span>오스템임플란트 MR서비스</span>
+  </div>
+  <div class="nav-links">
+    <a href="#services">서비스 안내</a>
+    <a href="#why">왜 오스템인가</a>
+    <a href="#brochure">브로셔</a>
+  </div>
+  <a href="https://forms.gle/S6gHh8hHDdPE4PDx5" target="_blank" class="nav-cta">📋 방문 신청</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-badge">OSSTEM IMPLANT MR SERVICE</div>
+      <h1>치과 처방, 이제<br><span>오스템이</span><br>함께합니다</h1>
+      <p>급여 삭감 대응부터 교육·샘플링까지<br>치과 전담 MR이 원장님의 처방을 책임집니다</p>
+      <div class="hero-btns">
+        <a href="https://forms.gle/S6gHh8hHDdPE4PDx5" target="_blank" class="btn-primary">📋 방문 신청하기</a>
+        <a href="#services" class="btn-secondary">서비스 보기 →</a>
+      </div>
+    </div>
+    <div class="hero-img">
+      <img src="https://raw.githubusercontent.com/justtime21-gif/osstem/main/%E1%84%91%E1%85%AD%E1%84%85%E1%85%A1%E1%86%BC%E1%84%8B%E1%85%B5.png"
+        alt="오스템 임플란트" onerror="this.style.display='none'">
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item"><span class="stat-num">3,579선</span><div class="stat-label">관리 치과 거래처 ('26년 3월 기준)</div></div>
+    <div class="stat-item"><span class="stat-num">5가지</span><div class="stat-label">전문 서비스 카테고리</div></div>
+    <div class="stat-item"><span class="stat-num">전품목</span><div class="stat-label">샘플 제공 가능</div></div>
+    <div class="stat-item"><span class="stat-num">즉시</span><div class="stat-label">전담 MR 대응 체계</div></div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="section services-bg" id="services">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-tag">핵심 서비스</div>
+      <h2 class="section-title">오스템 처방의약품 도입 혜택</h2>
+      <p class="section-desc">치과 운영의 모든 처방 관련 니즈를 오스템 전담 MR이 원스톱으로 지원합니다.</p>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:24px;">
+      <img src="https://raw.githubusercontent.com/justtime21-gif/osstem/main/1.png" alt="처방·급여 관리" style="width:100%;border-radius:20px;box-shadow:0 6px 24px rgba(0,0,0,0.08);" onerror="this.style.display='none'">
+      <img src="https://raw.githubusercontent.com/justtime21-gif/osstem/main/2.png" alt="환자·제품 지원" style="width:100%;border-radius:20px;box-shadow:0 6px 24px rgba(0,0,0,0.08);" onerror="this.style.display='none'">
+      <img src="https://raw.githubusercontent.com/justtime21-gif/osstem/main/3.png" alt="운영·물류 지원" style="width:100%;border-radius:20px;box-shadow:0 6px 24px rgba(0,0,0,0.08);" onerror="this.style.display='none'">
+      <img src="https://raw.githubusercontent.com/justtime21-gif/osstem/main/4.png" alt="교육 서비스" style="width:100%;border-radius:20px;box-shadow:0 6px 24px rgba(0,0,0,0.08);" onerror="this.style.display='none'">
+      <img src="https://raw.githubusercontent.com/justtime21-gif/osstem/main/5.png" alt="샘플링" style="width:100%;border-radius:20px;box-shadow:0 6px 24px rgba(0,0,0,0.08);" onerror="this.style.display='none'">
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="section" id="why">
+  <div class="section-inner">
+    <div class="section-header">
+      <div class="section-tag">왜 오스템인가</div>
+      <h2 class="section-title">원장님이 오스템을 선택하는 이유</h2>
+      <p class="section-desc">단순한 제품 공급을 넘어, 치과 운영 파트너로서 함께합니다.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card"><span class="why-num">①</span><div class="why-label">치과 전문 MR</div><div class="why-sub">임플란트부터 처방까지 치과에 특화된 전담 영업 인력</div></div>
+      <div class="why-card"><span class="why-num">②</span><div class="why-label">즉각 대응 체계</div><div class="why-sub">부작용·삭감·재고 등 모든 이슈에 신속하게 대처</div></div>
+      <div class="why-card"><span class="why-num">③</span><div class="why-label">전품목 지원</div><div class="why-sub">항생제·진통소염제·소화제·CHX·신제품까지 원스톱</div></div>
+      <div class="why-card"><span class="why-num">④</span><div class="why-label">교육·정보 제공</div><div class="why-sub">스탭 교육부터 최신 임상 트렌드까지 지속 업데이트</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- BROCHURE -->
+<section class="section brochure-section" id="brochure">
+  <div class="section-inner">
+    <div class="brochure-box">
+      <div>
+        <h3>📄 제품 브로셔 다운로드</h3>
+        <p>오스템 처방의약품 전체 제품 정보를 브로셔로 확인하세요.<br>항생제·진통소염제·소화제·CHX 전 품목 정보 수록.</p>
+      </div>
+      <a href="https://drive.google.com/file/d/17wFwV79rHH6LNFBdzro7Xh-73IkMpYhr/view?usp=drive_link"
+        target="_blank" class="brochure-btn">📄 브로셔 보기 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <h2>의약품 방문 신청</h2>
+  <p>신청서를 작성해 주시면 담당 MR이 직접 방문해 안내해 드립니다.</p>
+  <a href="https://forms.gle/S6gHh8hHDdPE4PDx5" target="_blank" class="cta-btn-white">📋 방문 신청하기</a>
+  <p class="cta-sub">* 신청 후 1~2 영업일 내 담당 MR이 연락드립니다</p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div><strong>오스템임플란트 MR팀</strong> · 서울/인천 파트 &nbsp;|&nbsp; ⓒ 2026 Osstem Implant. All rights reserved.</div>
+  <div class="footer-links">
+    <a href="#services">서비스 안내</a>
+    <a href="#why">왜 오스템인가</a>
+    <a href="https://forms.gle/S6gHh8hHDdPE4PDx5" target="_blank">방문 신청</a>
+  </div>
+</footer>
+
+</body>
+</html>
