@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>오스템 처방의약품 서비스</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  :root {
+    --orange: #F47B20;
+    --orange-light: #FFA44D;
+    --orange-pale: #FFF4EC;
+    --orange-dark: #D4620F;
+    --white: #FFFFFF;
+    --gray-light: #F8F8F8;
+    --gray: #6B7280;
+    --dark: #1A1A2E;
+  }
+  html { font-size: 16px; }
+  body { font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; color: var(--dark); background: var(--white); max-width: 480px; margin: 0 auto; overflow-x: hidden; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(160deg, #fff 0%, #FFF4EC 60%, #FFE8D0 100%);
+    padding: 56px 20px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 220px; height: 220px;
+    background: radial-gradient(circle, #FFD4A8 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: var(--orange);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.35;
+    margin-bottom: 14px;
+    color: var(--dark);
+  }
+  .hero h1 span { color: var(--orange); }
+  .hero p {
+    font-size: 14px;
+    color: var(--gray);
+    margin: 0 auto 28px;
+    line-height: 1.75;
+  }
+
+  /* STATS */
+  .stats-bar { background: var(--orange); padding: 20px 16px; }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .stat-item {
+    background: rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 14px 10px;
+    text-align: center;
+    color: white;
+  }
+  .stat-num { font-size: 22px; font-weight: 800; display: block; line-height: 1.2; }
+  .stat-label { font-size: 11px; opacity: 0.9; margin-top: 5px; line-height: 1.4; }
+
+  /* SECTION */
+  section { padding: 48px 16px; }
+  .section-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--orange);
+    letter-spacing: 0.8px;
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    line-height: 1.35;
+  }
+  .section-desc {
+    color: var(--gray);
+    font-size: 13px;
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+
+  /* SERVICES */
+  .services-bg { background: var(--gray-light); }
+  .category-block { margin-bottom: 32px; }
+  .category-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--orange-dark);
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #FFD4A8;
+  }
+  .cat-icon {
+    width: 28px; height: 28px;
+    background: var(--orange);
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .cards-grid { display: flex; flex-direction: column; gap: 10px; }
+  .card {
+    background: white;
+    border-radius: 14px;
+    padding: 16px;
+    border: 1.5px solid #FFE8D0;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .card-icon { font-size: 22px; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+  .card-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; color: var(--dark); }
+  .card-desc { font-size: 12px; color: var(--gray); line-height: 1.6; }
+
+  /* WHY */
+  .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .why-card {
+    text-align: center;
+    padding: 22px 12px;
+    border-radius: 14px;
+    background: var(--orange-pale);
+    border: 1.5px solid #FFD4A8;
+  }
+  .why-num { font-size: 28px; font-weight: 900; color: var(--orange); display: block; margin-bottom: 6px; }
+  .why-label { font-size: 13px; font-weight: 700; margin-bottom: 5px; }
+  .why-sub { font-size: 11px; color: var(--gray); line-height: 1.5; }
+
+  /* BROCHURE */
+  .brochure-section { background: #fff; padding: 40px 16px; text-align: center; }
+
+  /* CTA */
+  .cta-section {
+    background: linear-gradient(135deg, var(--orange-dark) 0%, var(--orange) 100%);
+    text-align: center;
+    padding: 52px 20px;
+  }
+  .cta-section h2 { color: white; font-size: 20px; font-weight: 800; margin-bottom: 12px; line-height: 1.35; }
+  .cta-section p { color: rgba(255,255,255,0.88); font-size: 13px; margin-bottom: 28px; line-height: 1.7; }
+  .cta-btn-white {
+    display: inline-block;
+    background: white;
+    color: var(--orange-dark);
+    font-size: 15px;
+    font-weight: 800;
+    padding: 13px 36px;
+    border-radius: 50px;
+    text-decoration: none;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark);
+    color: rgba(255,255,255,0.55);
+    text-align: center;
+    padding: 24px 16px;
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  footer strong { color: white; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <img src="https://raw.githubusercontent.com/justtime21-gif/osstem/main/SCR-20260420-olzy.png"
+    alt="오스템임플란트 로고"
+    style="height:36px;object-fit:contain;margin-bottom:16px;"
+    onerror="this.style.display='none'">
+  <img src="https://raw.githubusercontent.com/justtime21-gif/osstem/main/%E1%84%91%E1%85%AD%E1%84%85%E1%85%A1%E1%86%BC%E1%84%8B%E1%85%B5.png"
+    alt="오스템 임플란트"
+    style="width:100%;max-width:320px;border-radius:16px;margin-bottom:24px;box-shadow:0 8px 24px rgba(0,0,0,0.12);"
+    onerror="this.style.display='none'">
+  <div class="hero-badge">OSSTEM IMPLANT MR SERVICE</div>
+  <h1>치과 처방, 이제<br><span>오스템이 함께합니다</span></h1>
+  <p>급여 삭감 대응부터 교육·샘플링까지<br>치과 전담 MR이 원장님의 처방을<br>책임집니다</p>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-grid">
+    <div class="stat-item">
+      <span class="stat-num">3,579선</span>
+      <div class="stat-label">관리 치과 거래처<br>'26년 3월 기준</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">5가지</span>
+      <div class="stat-label">전문 서비스<br>카테고리</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">전품목</span>
+      <div class="stat-label">샘플 제공 가능</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">즉시</span>
+      <div class="stat-label">전담 MR<br>대응 체계</div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services-bg" id="services">
+  <span class="section-tag">핵심 서비스</span>
+  <h2 class="section-title">오스템 처방의약품<br>도입 혜택</h2>
+  <p class="section-desc">치과 운영의 모든 처방 관련 니즈를 오스템 전담 MR이 원스톱으로 지원합니다.</p>
+
+  <div style="display:flex;flex-direction:column;gap:16px;">
+    <img src="https://raw.githubusercontent.com/justtime21-gif/osstem/main/1.png" alt="처방·급여 관리" style="width:100%;border-radius:16px;box-shadow:0 4px 16px rgba(0,0,0,0.08);" onerror="this.style.display='none'">
+    <img src="https://raw.githubusercontent.com/justtime21-gif/osstem/main/2.png" alt="환자·제품 지원" style="width:100%;border-radius:16px;box-shadow:0 4px 16px rgba(0,0,0,0.08);" onerror="this.style.display='none'">
+    <img src="https://raw.githubusercontent.com/justtime21-gif/osstem/main/3.png" alt="운영·물류 지원" style="width:100%;border-radius:16px;box-shadow:0 4px 16px rgba(0,0,0,0.08);" onerror="this.style.display='none'">
+    <img src="https://raw.githubusercontent.com/justtime21-gif/osstem/main/4.png" alt="교육 서비스" style="width:100%;border-radius:16px;box-shadow:0 4px 16px rgba(0,0,0,0.08);" onerror="this.style.display='none'">
+    <img src="https://raw.githubusercontent.com/justtime21-gif/osstem/main/5.png" alt="샘플링" style="width:100%;border-radius:16px;box-shadow:0 4px 16px rgba(0,0,0,0.08);" onerror="this.style.display='none'">
+  </div>
+</section>
+
+<!-- WHY -->
+<section>
+  <span class="section-tag">왜 오스템인가</span>
+  <h2 class="section-title">전국 약 3,500개의 치과가<br><span style="color:var(--orange);">오스템 처방약</span>을<br>선택하는 이유</h2>
+  <p class="section-desc">단순한 제품 공급을 넘어, 치과 운영 파트너로서 함께합니다.</p>
+  <div class="why-grid">
+    <div class="why-card">
+      <span class="why-num">①</span>
+      <div class="why-label">치과 전문 MR</div>
+      <div class="why-sub">임플란트부터 처방까지 치과 특화 전담 인력</div>
+    </div>
+    <div class="why-card">
+      <span class="why-num">②</span>
+      <div class="why-label">즉각 대응</div>
+      <div class="why-sub">부작용·삭감·재고 모든 이슈 신속 처리</div>
+    </div>
+    <div class="why-card">
+      <span class="why-num">③</span>
+      <div class="why-label">전품목 지원</div>
+      <div class="why-sub">항생제·진통소염제·CHX·신제품 원스톱</div>
+    </div>
+    <div class="why-card">
+      <span class="why-num">④</span>
+      <div class="why-label">교육·정보</div>
+      <div class="why-sub">스탭 교육부터 최신 임상 트렌드까지</div>
+    </div>
+  </div>
+</section>
+
+<!-- BROCHURE -->
+<div class="brochure-section">
+  <span class="section-tag">자료 다운로드</span>
+  <h2 class="section-title" style="margin-bottom:10px;">제품 브로셔</h2>
+  <p class="section-desc" style="margin-bottom:24px;">오스템 처방의약품 전체 제품 정보를<br>브로셔로 확인하세요.</p>
+  <a href="https://drive.google.com/file/d/17wFwV79rHH6LNFBdzro7Xh-73IkMpYhr/view?usp=drive_link"
+     target="_blank"
+     style="display:inline-flex;align-items:center;gap:10px;background:var(--orange);color:white;font-size:15px;font-weight:700;padding:14px 28px;border-radius:50px;text-decoration:none;box-shadow:0 6px 18px rgba(244,123,32,0.35);">
+    <span style="font-size:20px;">📄</span> 제품 브로셔 보기
+  </a>
+  <p style="margin-top:14px;font-size:11px;color:var(--gray);">구글 드라이브에서 열립니다</p>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <h2>의약품 방문 신청</h2>
+  <p>아래 버튼을 눌러 신청서를 작성해 주시면<br>담당 MR이 직접 방문해 안내해 드립니다.</p>
+  <a href="https://forms.gle/S6gHh8hHDdPE4PDx5" target="_blank" class="cta-btn-white">📋 방문 신청하기</a>
+  <p style="margin-top:16px;font-size:11px;color:rgba(255,255,255,0.7);">* 신청 후 1~2 영업일 내 담당 MR이 연락드립니다</p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <strong>오스템임플란트 MR팀</strong> · 서울/인천 파트<br>
+  ⓒ 2026 Osstem Implant. All rights reserved.
+</footer>
+
+</body>
+</html>
